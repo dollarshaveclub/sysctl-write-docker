@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strconv"
 )
 
 var (
@@ -46,5 +47,11 @@ func main() {
 			}
 			log.Fatalf("error setting kernel parameter %s=%s: %s", key, value, err)
 		}
+	}
+
+	// Optionally block forever. This usefule when this tool is
+	// ran as a DaemonSet in Kubernetes.
+	if ok, _ := strconv.ParseBool(os.Getenv("SYSCTL_BLOCK")); ok {
+		select {}
 	}
 }
