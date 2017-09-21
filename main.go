@@ -54,6 +54,6 @@ func main() {
 	// Optionally block forever. This usefule when this tool is
 	// ran as a DaemonSet in Kubernetes.
 	if ok, _ := strconv.ParseBool(os.Getenv("SYSCTL_BLOCK")); ok {
-		<-time.After(time.Duration(math.MinInt64))
+		<-time.After(time.Duration(math.MaxInt64))
 	}
 }
