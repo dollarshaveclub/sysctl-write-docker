@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -36,7 +37,13 @@ func main() {
 			"-w",
 			fmt.Sprintf("%s=%s", key, value),
 		)
+		stderrBuf := &bytes.Buffer{}
+		command.Stderr = stderrBuf
+
 		if err := command.Run(); err != nil {
+			if _, ok := err.(*exec.ExitError); ok {
+				log.Fatalf("error setting kernel parameter %s=%s: %s", key, value, stderrBuf.String())
+			}
 			log.Fatalf("error setting kernel parameter %s=%s: %s", key, value, err)
 		}
 	}
