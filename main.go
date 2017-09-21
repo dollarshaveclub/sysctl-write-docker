@@ -5,9 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math"
 	"os"
 	"os/exec"
 	"strconv"
+	"time"
 )
 
 var (
@@ -52,6 +54,6 @@ func main() {
 	// Optionally block forever. This usefule when this tool is
 	// ran as a DaemonSet in Kubernetes.
 	if ok, _ := strconv.ParseBool(os.Getenv("SYSCTL_BLOCK")); ok {
-		select {}
+		<-time.After(time.Duration(math.MinInt64))
 	}
 }
